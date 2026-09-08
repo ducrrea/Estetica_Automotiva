@@ -1,0 +1,76 @@
+<!-- Tela de Autenticação / Login -->
+<div class="login-wrapper d-flex align-items-center justify-content-center min-vh-100 p-3">
+  <div class="login-card p-4 p-sm-5">
+    
+    <!-- Cabeçalho do Card -->
+    <div class="text-center mb-4">
+      <div class="logo-box mx-auto mb-3 d-flex align-items-center justify-content-center">
+        <i class="bi bi-shield-shaded text-cyan display-6"></i>
+      </div>
+      <h3 class="fw-bold text-white mb-1">APEX <span class="text-cyan">DETAILING</span></h3>
+      <p class="text-secondary small mb-0">Sistema de Agendamento Inteligente</p>
+    </div>
+
+    <!-- Alerta de Erro de Autenticação (Exibe motivo em caso de falha) -->
+    <div *ngIf="mensagemErro" class="alert alert-danger d-flex align-items-center gap-2 py-2 px-3 mb-4 rounded-3" id="login-error-alert" role="alert">
+      <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 text-danger"></i>
+      <span class="small text-danger fw-semibold">{{ mensagemErro }}</span>
+    </div>
+
+    <!-- Formulário de Login -->
+    <form (ngSubmit)="realizarLogin()">
+      <!-- Campo E-mail -->
+      <div class="mb-3">
+        <label for="email" class="form-label">E-mail</label>
+        <div class="input-group">
+          <span class="input-group-text icon-addon">
+            <i class="bi bi-envelope text-secondary"></i>
+          </span>
+          <input
+            type="email"
+            class="form-control form-control-custom"
+            id="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="Digite seu e-mail"
+            required
+            autocomplete="username"
+          />
+        </div>
+      </div>
+
+      <!-- Campo Senha -->
+      <div class="mb-4">
+        <label for="senha" class="form-label">Senha</label>
+        <div class="input-group">
+          <span class="input-group-text icon-addon">
+            <i class="bi bi-lock text-secondary"></i>
+          </span>
+          <input
+            type="password"
+            class="form-control form-control-custom"
+            id="senha"
+            name="senha"
+            [(ngModel)]="senha"
+            placeholder="Digite sua senha"
+            required
+            autocomplete="current-password"
+          />
+        </div>
+      </div>
+
+      <!-- Botão de Entrar -->
+      <button
+        type="submit"
+        class="btn btn-cyan w-100 py-2 d-flex align-items-center justify-content-center gap-2"
+        id="btn-login"
+        [disabled]="carregando"
+      >
+        <span *ngIf="carregando" class="spinner-border spinner-border-sm" role="status"></span>
+        <i *ngIf="!carregando" class="bi bi-box-arrow-in-right"></i>
+        <span>{{ carregando ? 'Acessando...' : 'Entrar no Sistema' }}</span>
+      </button>
+    </form>
+
+  </div>
+</div>
