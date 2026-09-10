@@ -1,1 +1,27 @@
-./node_modules
+# Dependências
+node_modules/
+**/node_modules/
+
+# Compilação e Caches (Angular e Node)
+dist/
+**/dist/
+.angular/
+**/.angular/
+*.tsbuildinfo
+*.angular-compiler.db*
+
+# Variáveis de Ambiente (Segredos)
+.env
+**/.env
+!.env.example
+
+# Configurações do VS Code e do Sistema Operacional
+.vscode/
+**/.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs de Erro
+*.log
+npm-debug.log*

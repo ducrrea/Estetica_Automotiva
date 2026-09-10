@@ -102,3 +102,5 @@ VALUES
     (3, 3, CURRENT_DATE, '14:00:00', 'Vitrificação Cerâmica 9H (3 anos)', 1600.00, 'AGENDADO', 'Veículo 0km recém-retirado da concessionária'),
     (4, 4, CURRENT_DATE + INTERVAL '1 day', '08:30:00', 'Higienização Interna Completa + Ozônio', 350.00, 'AGENDADO', 'Higienização de bancos de couro claro')
 ON CONFLICT DO NOTHING;
+
+TRUNCATE TABLE agendamentos CASCADE;

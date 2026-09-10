@@ -11,6 +11,8 @@ export class AgendamentoService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api/agendamentos';
 
+
+
   // Lista todos os agendamentos realizados
   listar(): Observable<RespostaApiAgendamento> {
     return this.http.get<RespostaApiAgendamento>(this.apiUrl);

@@ -11,6 +11,7 @@ export class RecursoService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api/recursos';
 
+
   // Obtém a lista de todos os boxes/recursos disponíveis
   listar(): Observable<RespostaApiRecurso> {
     return this.http.get<RespostaApiRecurso>(this.apiUrl);

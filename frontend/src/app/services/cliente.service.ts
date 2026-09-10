@@ -11,6 +11,8 @@ export class ClienteService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api/clientes';
 
+
+
   // Lista clientes cadastrados com busca opcional por nome ou documento
   listar(busca?: string): Observable<RespostaApiCliente> {
     let params = new HttpParams();

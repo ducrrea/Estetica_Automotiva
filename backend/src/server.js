@@ -1,4 +1,3 @@
-// Servidor Principal da API REST em Express
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -13,6 +12,11 @@ const PORT = process.env.PORT || 3000;
 // Configuração de Middlewares Globais
 app.use(cors());
 app.use(express.json());
+
+// === COLE O CÓDIGO DE TESTE AQUI ===
+app.get('/', (req, res) => {
+  res.send('API de Estética Automotiva está funcionando online!');
+});
 
 // Injeção de Rotas Principais
 app.use('/api', routes);
