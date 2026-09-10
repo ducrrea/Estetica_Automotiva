@@ -1,4 +1,4 @@
-# 🚗 Apex Detailing - Sistema Inteligente de Agendamento (White-Label)
+# Apex Detailing - Sistema Inteligente de Agendamento (White-Label)
 
 [![Angular](https://img.shields.io/badge/Angular-22.x-dd0031.svg?logo=angular)](https://angular.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-24.x-339933.svg?logo=node.js)](https://nodejs.org/)
