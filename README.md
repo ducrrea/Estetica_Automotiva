@@ -10,7 +10,7 @@
 
 ---
 
-## 📋 Índice
+## Índice
 
 1. [Visão Geral e Contexto](#-visão-geral-e-contexto)
 2. [Arquitetura do Sistema](#-arquitetura-do-sistema)
@@ -24,11 +24,11 @@
 
 ---
 
-## 🎯 Visão Geral e Contexto
+## Visão Geral e Contexto
 
 O **Apex Detailing** é um sistema White-Label desenvolvido para centros de estética automotiva, estúdios de detalhamento (*detailing*) e lava-rápidos premium. O objetivo central é eliminar cadernos de papel e planilhas confusas, garantindo que nenhum Box de lavagem, polimento ou vitrificação seja reservado em duplicidade para o mesmo dia e horário.
 
-### 🌟 Destaques da Solução
+### Destaques da Solução
 - **Frontend em Angular 22:** Single Page Application (SPA) responsiva, componentes standalone, interceptors de autenticação, feedback visual imediato e CSS limpo integrado ao Bootstrap 5.
 - **Backend REST em Node.js:** Arquitetura em camadas (Controllers, Services, Repositories, Middlewares), princípios SOLID, funções enxutas (máx. 20 linhas) e comentários em `pt-BR`.
 - **Banco de Dados PostgreSQL:** Banco `saep_agendamento_db` estruturado com chaves estrangeiras, índices de performance e restrições de integridade.
@@ -36,7 +36,7 @@ O **Apex Detailing** é um sistema White-Label desenvolvido para centros de est�
 
 ---
 
-## 🏛️ Arquitetura do Sistema
+## Arquitetura do Sistema
 
 ```mermaid
 graph TD
@@ -73,7 +73,7 @@ graph TD
 
 ---
 
-## 📑 Entregas e Documentação (Anexo III)
+## Entregas e Documentação (Anexo III)
 
 Todas as 10 entregas exigidas pelo desafio técnico estão organizadas e documentadas no projeto:
 
@@ -92,7 +92,7 @@ Todas as 10 entregas exigidas pelo desafio técnico estão organizadas e documen
 
 ---
 
-## 🗄️ Diagrama Entidade-Relacionamento (DER)
+## Diagrama Entidade-Relacionamento (DER)
 
 A modelagem relacional do banco de dados `saep_agendamento_db` foi concebida para atender à alta performance e integridade:
 
@@ -147,7 +147,7 @@ erDiagram
     RECURSOS ||--o{ AGENDAMENTOS : "recebe"
 ```
 
-### 🏷️ Recursos / Boxes Populados Inicialmente:
+### Recursos / Boxes Populados Inicialmente:
 1. **Box 01 - Lavagem Detalhada & Snow Foam** (Lavagem técnica, shampoo neutro e secagem filtrada)
 2. **Box 02 - Polimento Técnico & Correção** (Cabine LED para remoção de micro-riscos e hologramas)
 3. **Box 03 - Vitrificação Cerâmica & Nano** (Ambiente climatizado para cura de cerâmicas 9H)
@@ -156,7 +156,7 @@ erDiagram
 
 ---
 
-## 🛡️ Regra de Negócio: Anti Double-Booking
+## Regra de Negócio: Anti Double-Booking
 
 Para prevenir conflitos de agenda:
 1. Ao enviar um novo agendamento, o backend executa a consulta:
@@ -171,7 +171,7 @@ Para prevenir conflitos de agenda:
 
 ---
 
-## 📁 Estrutura de Pastas
+## Estrutura de Pastas
 
 ```text
 Estetica_Automotiva/
@@ -216,7 +216,7 @@ Estetica_Automotiva/
 
 ---
 
-## 🔌 Endpoints da API REST
+## Endpoints da API REST
 
 | Método | Endpoint | Protegido | Descrição |
 |---|---|:---:|---|
@@ -236,7 +236,7 @@ Estetica_Automotiva/
 
 ---
 
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 - [Node.js](https://nodejs.org/) v18+ (testado em v24.16.0)
@@ -270,13 +270,13 @@ npm start
 ```
 > O Frontend estará acessível no navegador em: `http://localhost:4200`
 
-### 🔑 Credenciais de Acesso Padrão:
+### Credenciais de Acesso Padrão:
 - **E-mail:** `admin@estetica.com`
 - **Senha:** `admin123`
 
 ---
 
-## 🧪 Casos de Teste Homologados
+## Casos de Teste Homologados
 
 Todos os 10 casos de teste especificados no Anexo III foram implementados e validados:
 
