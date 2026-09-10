@@ -1,35 +1,48 @@
-// Serviço Angular para Operações de Agendamentos
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Agendamento, RespostaApiAgendamento } from '../models/agendamento.model';
+import { Observable, catchError, throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AgendamentoService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api/agendamentos';
+  private apiRecursosUrl = 'http://localhost:3000/api/recursos';
 
-
-
-  // Lista todos os agendamentos realizados
-  listar(): Observable<RespostaApiAgendamento> {
-    return this.http.get<RespostaApiAgendamento>(this.apiUrl);
+  listar(): Observable<any> {
+    return this.http.get(this.apiUrl);
   }
 
-  // Cria um novo agendamento (processando validação de conflito de horário)
-  criar(agendamento: Agendamento): Observable<RespostaApiAgendamento> {
-    return this.http.post<RespostaApiAgendamento>(this.apiUrl, agendamento);
+  listarRecursos(): Observable<any> {
+    return this.http.get(this.apiRecursosUrl);
   }
 
-  // Atualiza o status de um agendamento
-  alterarStatus(id: number, status: string): Observable<RespostaApiAgendamento> {
-    return this.http.patch<RespostaApiAgendamento>(`${this.apiUrl}/${id}/status`, { status });
+  criar(agendamento: any): Observable<any> {
+    return this.http.post(this.apiUrl, agendamento);
   }
 
-  // Exclui um agendamento
-  excluir(id: number): Observable<{ sucesso: boolean; mensagem: string }> {
-    return this.http.delete<{ sucesso: boolean; mensagem: string }>(`${this.apiUrl}/${id}`);
+  atualizar(id: any, agendamento: any): Observable<any> {
+    if (!id || id === 'undefined') {
+      return throwError(() => new Error('ID do agendamento inválido ou ausente.'));
+    }
+
+    // Tenta via PUT primeiro; se o servidor esperar PATCH, tenta PATCH como fallback
+    return this.http.put(`${this.apiUrl}/${id}`, agendamento).pipe(
+      catchError((err) => {
+        if (err.status === 404 || err.status === 405) {
+          return this.http.patch(`${this.apiUrl}/${id}`, agendamento);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  excluir(id: any): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
+
+  cancelar(id: any): Observable<any> {
+    return this.excluir(id);
   }
 }

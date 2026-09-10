@@ -83,7 +83,7 @@
             </td>
             <td>
               <div>
-                <span class="fw-bold text-white d-block">{{ a.cliente_nome }}</span>
+                <span class="fw-bold d-block" style="color: #000000 !important;">{{ a.cliente_nome }}</span>
                 <small class="text-secondary"><i class="bi bi-car-front me-1"></i>{{ a.veiculo_modelo }}</small>
               </div>
             </td>
@@ -102,13 +102,16 @@
                 {{ a.status }}
               </span>
             </td>
+
             <td class="text-end">
-              <button *ngIf="a.status !== 'CANCELADO'" (click)="cancelarAgendamento(a)"
-                class="btn btn-sm btn-outline-danger btn-action" title="Cancelar Agendamento"
-                [id]="'btn-cancelar-' + a.id">
-                <i class="bi bi-x-circle"></i>
-              </button>
-              <span *ngIf="a.status === 'CANCELADO'" class="text-secondary small">Cancelado</span>
+              <div class="d-flex justify-content-end gap-2">
+                <button (click)="editarAgendamento(a)" class="btn btn-sm btn-outline-info btn-action" title="Editar Agendamento" [id]="'btn-editar-' + a.id">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button (click)="solicitarExclusao(a)" class="btn btn-sm btn-outline-danger btn-action" title="Excluir Agendamento" [id]="'btn-excluir-' + a.id">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -118,27 +121,27 @@
 
 </div>
 
-<!-- MODAL: NOVO AGENDAMENTO -->
+<!-- MODAL: AGENDAMENTO (NOVO / EDITAR) -->
 <div *ngIf="exibirModalForm" class="modal-backdrop-custom d-flex align-items-center justify-content-center p-3">
   <div class="modal-card-custom p-4">
 
-    <!-- Cabeçalho do Modal -->
+    <!-- Cabeçalho do Modal Dinâmico -->
     <div
       class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
       <h5 class="fw-bold text-white mb-0">
-        <i class="bi bi-calendar-plus text-cyan me-2"></i>
-        <span>Novo Agendamento de Box</span>
+        <i class="bi" [ngClass]="modoEdicao ? 'bi-pencil-square text-cyan' : 'bi-calendar-plus text-cyan'"></i>
+        <span class="ms-2">{{ modoEdicao ? 'Editar Agendamento' : 'Novo Agendamento de Box' }}</span>
       </h5>
       <button (click)="exibirModalForm = false" class="btn-close btn-close-white"></button>
     </div>
 
-    <!-- ALERTA DE CONFLITO DE HORÁRIO (REGRA OBRIGATÓRIA - DOUBLE BOOKING) -->
+    <!-- AVISO DO PRÓPRIO SITE PARA ERROS / CONFLITOS -->
     <div *ngIf="alertaConflito"
       class="alert alert-danger d-flex align-items-start gap-2 p-3 mb-4 rounded-3 border-danger shadow"
       id="alerta-conflito-horario" role="alert">
       <i class="bi bi-exclamation-octagon-fill fs-4 flex-shrink-0 text-danger"></i>
       <div>
-        <strong class="d-block text-danger mb-1">Bloqueio de Conflito de Horário!</strong>
+        <strong class="d-block text-danger mb-1">Aviso do Sistema</strong>
         <span class="small text-white">{{ alertaConflito }}</span>
       </div>
     </div>
@@ -157,11 +160,10 @@
               {{ cli.nome }} ({{ cli.veiculo_modelo }})
             </option>
           </select>
-          <div *ngIf="errosForm['cliente_id']" class="text-danger small mt-1 fw-semibold">{{ errosForm['cliente_id'] }}
-          </div>
+          <div *ngIf="errosForm['cliente_id']" class="text-danger small mt-1 fw-semibold">{{ errosForm['cliente_id'] }}</div>
         </div>
 
-        <!-- Seleção do Recurso / Box (DROPDOWN DINÂMICO) -->
+        <!-- Seleção do Recurso / Box -->
         <div class="col-12 col-md-6">
           <label class="form-label">Box de Estética *</label>
           <select class="form-select form-select-custom" [ngClass]="{ 'border-danger': errosForm['recurso_id'] }"
@@ -171,8 +173,7 @@
               {{ rec.nome }} ({{ rec.tipo }})
             </option>
           </select>
-          <div *ngIf="errosForm['recurso_id']" class="text-danger small mt-1 fw-semibold">{{ errosForm['recurso_id'] }}
-          </div>
+          <div *ngIf="errosForm['recurso_id']" class="text-danger small mt-1 fw-semibold">{{ errosForm['recurso_id'] }}</div>
         </div>
 
         <!-- Data do Agendamento -->
@@ -181,8 +182,7 @@
           <input type="date" style="color: #000000 !important; color-scheme: light !important;"
             class="form-control form-control-custom" [ngClass]="{ 'border-danger': errosForm['data_agendamento'] }"
             [(ngModel)]="novoAgendamento.data_agendamento" name="data_agendamento" id="input-data-agendamento" />
-          <div *ngIf="errosForm['data_agendamento']" class="text-danger small mt-1 fw-semibold">{{
-            errosForm['data_agendamento'] }}</div>
+          <div *ngIf="errosForm['data_agendamento']" class="text-danger small mt-1 fw-semibold">{{ errosForm['data_agendamento'] }}</div>
         </div>
 
         <!-- Hora do Agendamento -->
@@ -191,8 +191,7 @@
           <input type="time" class="form-control form-control-custom"
             [ngClass]="{ 'border-danger': errosForm['hora_agendamento'] }"
             [(ngModel)]="novoAgendamento.hora_agendamento" name="hora_agendamento" id="input-hora-agendamento" />
-          <div *ngIf="errosForm['hora_agendamento']" class="text-danger small mt-1 fw-semibold">{{
-            errosForm['hora_agendamento'] }}</div>
+          <div *ngIf="errosForm['hora_agendamento']" class="text-danger small mt-1 fw-semibold">{{ errosForm['hora_agendamento'] }}</div>
         </div>
 
         <!-- Serviço -->
@@ -227,11 +226,31 @@
         <button type="submit" class="btn btn-cyan px-4 d-flex align-items-center gap-2" id="btn-confirmar-agendamento"
           [disabled]="salvando">
           <span *ngIf="salvando" class="spinner-border spinner-border-sm" role="status"></span>
-          <i *ngIf="!salvando" class="bi bi-calendar-check-fill"></i>
-          <span>{{ salvando ? 'Validando Horário...' : 'Confirmar Agendamento' }}</span>
+          <i *ngIf="!salvando" class="bi" [ngClass]="modoEdicao ? 'bi-check2-circle' : 'bi-calendar-check-fill'"></i>
+          <span>{{ salvando ? 'Validando Horário...' : (modoEdicao ? 'Salvar Alterações' : 'Confirmar Agendamento') }}</span>
         </button>
       </div>
     </form>
 
+  </div>
+</div>
+
+<!-- MODAL: CONFIRMAÇÃO DE EXCLUSÃO (INTERFACE PRÓPRIA DO SITE) -->
+<div *ngIf="exibirModalExcluir" class="modal-backdrop-custom d-flex align-items-center justify-content-center p-3">
+  <div class="modal-card-custom p-4" style="max-width: 440px;">
+    <div class="text-center mb-3">
+      <i class="bi bi-exclamation-triangle-fill text-danger display-5 d-block mb-2"></i>
+      <h5 class="fw-bold text-white mb-2">Confirmar Exclusão</h5>
+      <p class="text-secondary small mb-0">
+        Deseja excluir/cancelar o agendamento do cliente <strong class="text-white">{{ agendamentoParaExcluir?.cliente_nome || 'selecionado' }}</strong>?
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-center gap-2 mt-4">
+      <button (click)="exibirModalExcluir = false" class="btn btn-secondary px-3">Voltar</button>
+      <button (click)="confirmarExclusao()" class="btn btn-danger px-4" id="btn-confirmar-exclusao">
+        <i class="bi bi-trash-fill me-1"></i> Sim, Excluir
+      </button>
+    </div>
   </div>
 </div>

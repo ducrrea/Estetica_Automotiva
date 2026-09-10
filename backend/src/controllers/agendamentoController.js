@@ -21,6 +21,16 @@ async function criar(req, res, next) {
   }
 }
 
+// Atualiza os dados completos de um agendamento
+async function atualizar(req, res, next) {
+  try {
+    const atualizado = await agendamentoService.atualizar(req.params.id, req.body);
+    return res.status(200).json({ sucesso: true, dados: atualizado, mensagem: 'Agendamento atualizado com sucesso!' });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 // Altera o status do agendamento (Ex: REALIZADO, CANCELADO)
 async function alterarStatus(req, res, next) {
   try {
@@ -45,6 +55,7 @@ async function excluir(req, res, next) {
 module.exports = {
   listar,
   criar,
+  atualizar,
   alterarStatus,
   excluir,
 };

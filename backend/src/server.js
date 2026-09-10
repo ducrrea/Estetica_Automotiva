@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// === COLE O CÓDIGO DE TESTE AQUI ===
 app.get('/', (req, res) => {
   res.send('API de Estética Automotiva está funcionando online!');
 });

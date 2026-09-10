@@ -9,7 +9,7 @@ import { RespostaApiDashboard } from '../models/dashboard.model';
 })
 export class DashboardService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/dashboard';
+  private apiUrl = 'http://localhost:3000/api/dashboard/stats';
 
 
   // Obtém métricas consolidadas do sistema

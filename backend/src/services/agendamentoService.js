@@ -43,6 +43,20 @@ async function criar(dados) {
   return agendamentoRepository.criar(dados, cliente, recurso);
 }
 
+// Atualiza um agendamento validando referências e conflito de horário
+async function atualizar(id, dados) {
+  validarDados(dados);
+  const { cliente_id, recurso_id, data_agendamento, hora_agendamento } = dados;
+  const cliente = await clienteRepository.buscarPorId(cliente_id);
+  if (!cliente) throw new Error('Cliente selecionado não foi encontrado.');
+  const recurso = await recursoRepository.buscarPorId(recurso_id);
+  if (!recurso) throw new Error('Box/Recurso selecionado não foi encontrado.');
+  await verificarConflito(recurso_id, data_agendamento, hora_agendamento, id);
+  const atualizado = await agendamentoRepository.atualizar(id, dados, cliente, recurso);
+  if (!atualizado) throw new Error('Agendamento não encontrado para atualização.');
+  return atualizado;
+}
+
 // Altera o status do agendamento (Ex: REALIZADO, CANCELADO)
 async function alterarStatus(id, novoStatus) {
   const statusPermitidos = ['AGENDADO', 'EM_ANDAMENTO', 'FINALIZADO', 'CANCELADO'];
@@ -64,6 +78,7 @@ async function excluir(id) {
 module.exports = {
   listar,
   criar,
+  atualizar,
   alterarStatus,
   excluir,
   verificarConflito,

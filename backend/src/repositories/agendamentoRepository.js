@@ -131,6 +131,40 @@ async function atualizarStatus(id, novoStatus) {
   return agendamento;
 }
 
+// Atualiza os campos editáveis do agendamento
+async function atualizar(id, dados, infoCliente, infoRecurso) {
+  const { cliente_id, recurso_id, data_agendamento, hora_agendamento, servico, valor, observacoes, status } = dados;
+  if (getIsPgConnected()) {
+    const sql = `
+      UPDATE agendamentos
+      SET cliente_id = $1, recurso_id = $2, data_agendamento = $3, hora_agendamento = $4,
+          servico = $5, valor = $6, observacoes = $7, status = COALESCE($8, status), atualizado_em = CURRENT_TIMESTAMP
+      WHERE id = $9
+      RETURNING *
+    `;
+    const res = await query(sql, [cliente_id, recurso_id, data_agendamento, hora_agendamento, servico, valor || 0, observacoes || '', status || null, id]);
+    return res.rows[0] || null;
+  }
+  const agendamento = agendamentosMemoria.find((item) => item.id === parseInt(id, 10));
+  if (!agendamento) return null;
+  Object.assign(agendamento, {
+    cliente_id: parseInt(cliente_id, 10),
+    cliente_nome: infoCliente ? infoCliente.nome : agendamento.cliente_nome,
+    cliente_telefone: infoCliente ? infoCliente.telefone : agendamento.cliente_telefone,
+    veiculo_modelo: infoCliente ? infoCliente.veiculo_modelo : agendamento.veiculo_modelo,
+    recurso_id: parseInt(recurso_id, 10),
+    recurso_nome: infoRecurso ? infoRecurso.nome : agendamento.recurso_nome,
+    data_agendamento,
+    hora_agendamento: hora_agendamento.substring(0, 5),
+    servico,
+    valor: parseFloat(valor) || 0,
+    status: status || agendamento.status,
+    observacoes: observacoes || '',
+    atualizado_em: new Date(),
+  });
+  return agendamento;
+}
+
 // Exclui um agendamento
 async function excluir(id) {
   if (getIsPgConnected()) {
@@ -148,5 +182,6 @@ module.exports = {
   buscarConflito,
   criar,
   atualizarStatus,
+  atualizar,
   excluir,
 };
